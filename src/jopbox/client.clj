@@ -2,7 +2,7 @@
   (:require [oauth.client :as oauth]
             [clj-http.client :as http]))
 
-;; Authorization & Authentication ---------------------------------------------
+;; Authorization & Authentication
 (defn make-consumer
   "Return Dropbox OAuth consumer."
   [app-key app-secret]
@@ -44,6 +44,7 @@
                      body))
 
 (defn account-info
+  "Retrieve information about the user's account."
   [consumer access-token-response]
   (http/get "https://api.dropbox.com/1/account/info"
             {:query-params (make-credentials consumer
@@ -67,12 +68,13 @@
   "Upload file to Dropbox using PUT.
      root can be either `dropbox` or `sandbox`"
   [consumer access-token-response root remote-path local-path]
-  (http/post (str "https://api-content.dropbox.com/1/files_put/" root "/" remote-path)
+  (http/post (str "https://api-content.dropbox.com/1/files/" root "/" remote-path)
             {:query-params (make-credentials consumer
                                              access-token-response
                                              :POST
                                              "https://api-content.dropbox.com/1/files_put/"
-                                             (clojure.java.io/file local-path))}))
+                                             nil)}
+            {:body (clojure.java.io/file local-path)}))
 
 (defn metadata
   "Retrieve file and folder metadata."
