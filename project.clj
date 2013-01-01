@@ -5,5 +5,5 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojars.samrat/clj-oauth "1.4.0-SNAPSHOT"]
-                 ;[oauth-clj "0.1.0"]
+                 [cheshire "5.0.1"]
                  ])

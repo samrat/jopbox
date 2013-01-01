@@ -1,6 +1,7 @@
 (ns jopbox.client
   (:require [oauth.client :as oauth]
-            [clj-http.client :as http]))
+            [clj-http.client :as http]
+            [cheshire.core :refer :all]))
 
 ;; Authorization & Authentication
 (defn make-consumer
@@ -53,6 +54,30 @@
                                              "https://api.dropbox.com/1/account/info"
                                              nil)}))
 
+(defn get-file
+  "Downloads a file."
+  [consumer access-token-response root path]
+  (let [request-url (format "https://api-content.dropbox.com/1/files/%s/%s" root path)]
+    (:body (http/get request-url
+                     {:query-params (make-credentials consumer
+                                                      access-token-response
+                                                      :GET
+                                                      request-url
+                                                      nil)}))))
+
+(defn media
+  "Returns a link directly to a file."
+  [consumer access-token-response root path]
+  (let [request-url (format "https://api.dropbox.com/1/media/%s/%s" root path)]
+    (:url (parse-string (:body (http/post request-url
+                                          {:query-params (make-credentials consumer
+                                                                           access-token-response
+                                                                           :POST
+                                                                           request-url
+                                                                           nil)}))
+                        true
+                                                                           ))))
+
 (defn delta
   ([consumer access-token-response cursor]
      (http/post "https://api.dropbox.com/1/delta"
@@ -68,20 +93,22 @@
   "Upload file to Dropbox using PUT.
      root can be either `dropbox` or `sandbox`"
   [consumer access-token-response root remote-path local-path]
-  (http/post (str "https://api-content.dropbox.com/1/files/" root "/" remote-path)
+  (http/put (str "https://api-content.dropbox.com/1/files_put/" root "/" remote-path)
             {:query-params (make-credentials consumer
                                              access-token-response
-                                             :POST
-                                             "https://api-content.dropbox.com/1/files_put/"
-                                             nil)}
-            {:body (clojure.java.io/file local-path)}))
+                                             :PUT
+                                             (str "https://api-content.dropbox.com/1/files_put/" root "/" remote-path)
+                                             nil)
+             :body (clojure.java.io/file local-path)
+             }))
 
 (defn metadata
   "Retrieve file and folder metadata."
   [consumer access-token-response root path]
-  (http/get (str "https://api.dropbox.com/1/metadata/" root "/" path)
-            {:query-params (make-credentials consumer
-                                             access-token-response
-                                             :GET
-                                             "https://api.dropbox.com/1/metadata/"
-                                             nil)}))
+  (let [request-url (format "https://api.dropbox.com/1/metadata/%s/%s" root path)]
+    (parse-string (:body (http/get request-url
+                                   {:query-params (make-credentials consumer
+                                                                    access-token-response
+                                                                    :GET
+                                                                    request-url
+                                                                    nil)})) true)))
