@@ -47,12 +47,13 @@
 (defn account-info
   "Retrieve information about the user's account."
   [consumer access-token-response]
-  (http/get "https://api.dropbox.com/1/account/info"
-            {:query-params (make-credentials consumer
-                                             access-token-response
-                                             :GET
-                                             "https://api.dropbox.com/1/account/info"
-                                             nil)}))
+  (let [request-url "https://api.dropbox.com/1/account/info"]
+    (http/get request-url
+              {:query-params (make-credentials consumer
+                                               access-token-response
+                                               :GET
+                                               request-url
+                                               nil)})))
 
 (defn get-file
   "Downloads a file."
@@ -80,12 +81,13 @@
 
 (defn delta
   ([consumer access-token-response cursor]
-     (http/post "https://api.dropbox.com/1/delta"
-            {:query-params (make-credentials consumer
-                                             access-token-response
-                                             :POST
-                                             "https://api.dropbox.com/1/delta"
-                                             nil)}))
+     (let [request-url "https://api.dropbox.com/1/delta"]
+       (http/post request-url
+                  {:query-params (make-credentials consumer
+                                                   access-token-response
+                                                   :POST
+                                                   request-url
+                                                   nil)})))
   ([consumer access-token-response]
      (delta consumer access-token-response nil)))
 
