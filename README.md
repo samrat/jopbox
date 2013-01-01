@@ -1,10 +1,11 @@
-# jopbox
+*j*opbox
+========
 
 Jopbox is a Clojure library for working with the Dropbox API
 
 ## Usage
 
-*You probably don't want to use this right now.*
+**You probably don't want to use this right now.**
 
     (use 'jopbox.client)
 
@@ -26,14 +27,24 @@ If you're using this with a web app, you probably want to use a callback URI to 
 
 ### API methods
 
+See [Dropbox's API Reference][docs] for more information on these methods.
+
 #### Account Info
     (account-info consumer access-token-response)
 
 #### File Metadata
     (metadata consumer access-token-response "sandbox" "video.flv")
 
+#### Delta
+    (delta consumer access-token-response <cursor>)
+
+#### Media
+    (media consumer access-token-response "sandbox" "video.flv")
+
 ## License
 
-Copyright © 2012 FIXME
+Copyright © 2012 Samrat Man Singh
 
 Distributed under the Eclipse Public License, the same as Clojure.
+
+[docs]: https://www.dropbox.com/developers/reference/api
