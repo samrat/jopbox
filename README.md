@@ -2,6 +2,7 @@ jopbox
 ========
 
 **NOTE: You probably don't want to use this right now.**
+
 jopbox is a Clojure library for working with the Dropbox API.
 
 ## Installation
@@ -62,7 +63,8 @@ See [Dropbox's API Reference][docs] for more information on these methods.
 ```
 
 #### Media `/media`
-```clojure(media consumer access-token-response "sandbox" "video.flv")
+```clojure
+(media consumer access-token-response "sandbox" "video.flv")
 ```
 
 #### Get File `/files(GET)`
