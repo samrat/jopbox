@@ -1,27 +1,42 @@
 jopbox
 ========
 
-*j*opbox is a Clojure library for working with the Dropbox API.
+**NOTE: You probably don't want to use this right now.**
+jopbox is a Clojure library for working with the Dropbox API.
+
+## Installation
+
+```clojure
+[jopbox "0.1.0-SNAPSHOT"]
+```
 
 ## Usage
 
-**NOTE: You probably don't want to use this right now.**
+Require `jopbox` from the REPL:
 
-    (use 'jopbox.client)
+```clojure
+(use 'jopbox.client)
+```
 
 ### Authorization and Authentication
 
-    (def consumer (make-consumer API-KEY API-SECRET))
-    (def request-token (fetch-request-token consumer <callback-uri>))
+```clojure
+(def consumer (make-consumer API-KEY API-SECRET))
+(def request-token (fetch-request-token consumer <callback-uri>))
+```
 
 Now, get the authorization URL:
 
-    (authorization-url consumer request-token)
-    ;=> Visit the URL that this returns on your browser.
+```clojure
+(authorization-url consumer request-token)
+;=> Visit the URL that this returns on your browser.
+```
 
 Then, get the access token response
 
-    (def access-token-response (fetch-access-token-response consumer request-token))
+```clojure
+(def access-token-response (fetch-access-token-response consumer request-token))
+```
 
 If you're using this with a web app, you probably want to use a callback URI to fetch token response.
 
@@ -31,24 +46,35 @@ See [Dropbox's API Reference][docs] for more information on these methods.
 
 [docs]: https://www.dropbox.com/developers/reference/api
 
-#### Account Info (`/account/info`)
-    (account-info consumer access-token-response)
+#### Account Info `/account/info`
+```clojure
+(account-info consumer access-token-response)
+```
 
-#### File Metadata (`/metadata`)
-    (metadata consumer access-token-response "sandbox" "video.flv")
+#### File Metadata `/metadata`
+```clojure
+(metadata consumer access-token-response "sandbox" "video.flv")
+```
 
-#### Delta (`/delta`)
-    (delta consumer access-token-response <cursor>)
+#### Delta `/delta`
+```clojure
+(delta consumer access-token-response <cursor>)
+```
 
-#### Media (`/media`)
-    (media consumer access-token-response "sandbox" "video.flv")
+#### Media `/media`
+```clojure(media consumer access-token-response "sandbox" "video.flv")
+```
 
-#### Get File (`/files(GET)`)
-    (get-file consumer access-token-response "sandbox" "foo.txt")
-    ;; This works fine with plaintext files, but if you're dealing with something else you probably want to use /media.
+#### Get File `/files(GET)`
+```clojure
+(get-file consumer access-token-response "sandbox" "foo.txt")
+;; This works fine with plaintext files, but if you're dealing with something else you probably want to use /media.
+```
 
-#### Upload file (`/files_put`)
-    (upload -file consumer access-token-response "sandbox" "foo.mp3" "/path/to/foo.mp3")
+#### Upload file `/files_put`
+```clojure
+(upload -file consumer access-token-response "sandbox" "foo.mp3" "/path/to/foo.mp3")
+```
 
 ## License
 
