@@ -75,7 +75,7 @@ See [Dropbox's API Reference][docs] for more information on these methods.
 
 #### Upload file `/files_put`
 ```clojure
-(upload -file consumer access-token-response "sandbox" "foo.mp3" "/path/to/foo.mp3")
+(upload-file consumer access-token-response "sandbox" "foo.mp3" "/path/to/foo.mp3")
 ```
 
 ## License
