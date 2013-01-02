@@ -93,16 +93,17 @@
 
 (defn upload-file
   "Upload file to Dropbox using PUT.
-     root can be either `dropbox` or `sandbox`"
+     root: this can be either `dropbox` or `sandbox`
+     remote-path: this is the path where the file will be uploaded to"
   [consumer access-token-response root remote-path local-path]
-  (http/put (str "https://api-content.dropbox.com/1/files_put/" root "/" remote-path)
-            {:query-params (make-credentials consumer
-                                             access-token-response
-                                             :PUT
-                                             (str "https://api-content.dropbox.com/1/files_put/" root "/" remote-path)
-                                             nil)
-             :body (clojure.java.io/file local-path)
-             }))
+  (let [request-url (format "https://api-content.dropbox.com/1/files_put/%s/%s" root remote-path)]
+    (http/put request-url
+              {:query-params (make-credentials consumer
+                                               access-token-response
+                                               :PUT
+                                               request-url
+                                               nil)
+               :body (clojure.java.io/file local-path)})))
 
 (defn metadata
   "Retrieve file and folder metadata."
