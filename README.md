@@ -59,7 +59,7 @@ See [Dropbox's API Reference][docs] for more information on these methods.
 
 #### File Metadata `/metadata`
 ```clojure
-(metadata consumer access-token-response "sandbox" "video.flv")
+(metadata consumer access-token-response :sandbox "video.flv")
 ```
 
 #### Delta `/delta`
@@ -69,18 +69,18 @@ See [Dropbox's API Reference][docs] for more information on these methods.
 
 #### Media `/media`
 ```clojure
-(media consumer access-token-response "sandbox" "video.flv")
+(media consumer access-token-response :sandbox "video.flv")
 ```
 
 #### Get File `/files(GET)`
 ```clojure
-(get-file consumer access-token-response "sandbox" "foo.txt")
+(get-file consumer access-token-response :sandbox "foo.txt")
 ;; This works fine with plaintext files, but if you're dealing with something else you probably want to use /media.
 ```
 
 #### Upload file `/files_put`
 ```clojure
-(upload-file consumer access-token-response "sandbox" "foo.mp3" "/path/to/foo.mp3")
+(upload-file consumer access-token-response :sandbox "foo.mp3" "/path/to/foo.mp3")
 ```
 
 ## Running Tests
