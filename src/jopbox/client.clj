@@ -78,7 +78,7 @@
   (let [request-url (format "https://api.dropbox.com/1/media/%s/%s"
                             (name root)
                             path)
-        (make-credentials consumer
+        credentials (make-credentials consumer
                           access-token-response
                           :POST
                           request-url
