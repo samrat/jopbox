@@ -1,7 +1,8 @@
 (ns jopbox.client
   (:require [oauth.client :as oauth]
             [clj-http.client :as http]
-            [cheshire.core :refer :all]))
+            [cheshire.core :refer :all])
+  (:use clojure.java.io))
 
 ;; Authorization & Authentication
 (defn make-consumer
@@ -48,12 +49,13 @@
   "Retrieve information about the user's account."
   [consumer access-token-response]
   (let [request-url "https://api.dropbox.com/1/account/info"]
-    (http/get request-url
-              {:query-params (make-credentials consumer
-                                               access-token-response
-                                               :GET
-                                               request-url
-                                               nil)})))
+    (parse-string (:body (http/get request-url
+                                   {:query-params (make-credentials consumer
+                                                                    access-token-response
+                                                                    :GET
+                                                                    request-url
+                                                                    nil)}))
+                  true)))
 
 (defn get-file
   "Downloads a file."
@@ -76,18 +78,18 @@
                                                                            :POST
                                                                            request-url
                                                                            nil)}))
-                        true
-                                                                           ))))
+                        true))))
 
 (defn delta
   ([consumer access-token-response cursor]
      (let [request-url "https://api.dropbox.com/1/delta"]
-       (http/post request-url
-                  {:query-params (make-credentials consumer
-                                                   access-token-response
-                                                   :POST
-                                                   request-url
-                                                   nil)})))
+       (parse-string (:body (http/post request-url
+                              {:query-params (make-credentials consumer
+                                                               access-token-response
+                                                               :POST
+                                                               request-url
+                                                               nil)}))
+                     true)))
   ([consumer access-token-response]
      (delta consumer access-token-response nil)))
 
@@ -97,13 +99,14 @@
      remote-path: this is the path where the file will be uploaded to"
   [consumer access-token-response root remote-path local-path]
   (let [request-url (format "https://api-content.dropbox.com/1/files_put/%s/%s" root remote-path)]
-    (http/put request-url
-              {:query-params (make-credentials consumer
-                                               access-token-response
-                                               :PUT
-                                               request-url
-                                               nil)
-               :body (clojure.java.io/file local-path)})))
+    (parse-string (:body (http/put request-url
+                                   {:query-params (make-credentials consumer
+                                                                    access-token-response
+                                                                    :PUT
+                                                                    request-url
+                                                                    nil)
+                                    :body (clojure.java.io/file local-path)}))
+                  true)))
 
 (defn metadata
   "Retrieve file and folder metadata."
@@ -115,3 +118,14 @@
                                                                     :GET
                                                                     request-url
                                                                     nil)})) true)))
+
+(defn create-folder
+  [consumer access-token-response root path]
+  (let [request-url "https://api.dropbox.com/1/fileops/create_folder"]
+    (http/post request-url
+               {:query-params (make-credentials consumer
+                                                access-token-response
+                                                :POST
+                                                request-url
+                                                nil)
+                :body {:root root :path path}})))

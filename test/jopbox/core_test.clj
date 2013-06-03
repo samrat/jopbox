@@ -1,7 +1,10 @@
-(ns jopbox.core-test
-  (:use clojure.test
-        jopbox.core))
+(ns jopbox.client-test
+  (:use clojure.test)
+  (:require [jopbox.client :as jopbox])
+  (:load "dropbox_keys"))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(def consumer (make-consumer dropbox-key dropbox-secret))
+
+(deftest
+  request-token
+  (jopbox/fetch-request-token consumer) )
