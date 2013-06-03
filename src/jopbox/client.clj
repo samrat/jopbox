@@ -62,7 +62,7 @@
   "Downloads a file."
   [consumer access-token-response root path]
   (let [request-url (format "https://api-content.dropbox.com/1/files/%s/%s"
-                            root
+                            (name root)
                             path)
         credentials (make-credentials consumer
                                       access-token-response
@@ -76,7 +76,7 @@
   "Returns a link directly to a file."
   [consumer access-token-response root path]
   (let [request-url (format "https://api.dropbox.com/1/media/%s/%s"
-                            root
+                            (name root)
                             path)
         (make-credentials consumer
                           access-token-response
@@ -103,11 +103,11 @@
 
 (defn upload-file
   "Upload file to Dropbox using PUT.
-     root: this can be either `dropbox` or `sandbox`
+     root: this can be either :dropbox or :sandbox
      remote-path: this is the path where the file will be uploaded to"
   [consumer access-token-response root remote-path local-path]
   (let [request-url (format "https://api-content.dropbox.com/1/files_put/%s/%s"
-                            root
+                            (name root)
                             remote-path)
         credentials (make-credentials consumer
                                       access-token-response
@@ -122,7 +122,9 @@
 (defn metadata
   "Retrieve file and folder metadata."
   [consumer access-token-response root path]
-  (let [request-url (format "https://api.dropbox.com/1/metadata/%s/%s" root path)
+  (let [request-url (format "https://api.dropbox.com/1/metadata/%s/%s"
+                            (name root)
+                            path)
         credentials (make-credentials consumer
                                       access-token-response
                                       :GET
@@ -141,4 +143,4 @@
                                       nil)]
     (http/post request-url
                {:query-params credentials
-                :body {:root root :path path}})))
+                :body {:root (name root) :path path}})))
