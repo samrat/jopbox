@@ -7,8 +7,10 @@ jopbox is a Clojure library for working with the Dropbox API.
 
 ## Installation
 
+Add this to your `project.clj`'s dependencies:
+
 ```clojure
-[jopbox "0.1.0-SNAPSHOT"]
+:dependencies [jopbox "0.2.0"]
 ```
 
 ## Usage
@@ -18,6 +20,8 @@ Require `jopbox` from the REPL:
 ```clojure
 (use 'jopbox.client)
 ```
+
+And before doing anything, you'll want to create a new Dropbox app [here](https://www.dropbox.com/developers/apps).
 
 ### Authorization and Authentication
 
@@ -39,7 +43,8 @@ Then, get the access token response
 (def access-token-response (fetch-access-token-response consumer request-token))
 ```
 
-If you're using this with a web app, you probably want to use a callback URI to fetch token response.
+If you're using this with a web app, you probably want to use a
+callback URI to fetch the token response.
 
 ### API methods
 
@@ -78,8 +83,20 @@ See [Dropbox's API Reference][docs] for more information on these methods.
 (upload-file consumer access-token-response "sandbox" "foo.mp3" "/path/to/foo.mp3")
 ```
 
+## Running Tests
+
+Create a file `test/jopbox/dropbox_keys.clj` with the following
+content:
+
+```clojure
+(def dropbox-key "YOUR-API-KEY")
+(def dropbox-secret "YOUR-API-SECRET")
+```
+
+Then, run `lein test`.
+
 ## License
 
-Copyright © 2012 Samrat Man Singh
+Copyright © 2013 Samrat Man Singh
 
 Distributed under the Eclipse Public License, the same as Clojure.
