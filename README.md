@@ -1,8 +1,6 @@
 jopbox
 ========
 
-**NOTE: You probably don't want to use this right now.**
-
 jopbox is a Clojure library for working with the Dropbox API.
 
 ## Demo
