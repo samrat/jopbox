@@ -5,6 +5,12 @@ jopbox
 
 jopbox is a Clojure library for working with the Dropbox API.
 
+## Demo
+
+You can visit http://jopbox-demo.herokuapp.com/ for a demo web-app
+that uses `jopbox`. The source of the demo can be found
+[here](http://github.com/samrat/joplet).
+
 ## Installation
 
 Add this to your `project.clj`'s dependencies:
