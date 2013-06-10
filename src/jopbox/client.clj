@@ -6,7 +6,9 @@
 
 ;; Authorization & Authentication
 (defn make-consumer
-  "Return Dropbox OAuth consumer."
+  "Takes an API key and secret and returns a Dropbox OAuth consumer.
+  The next step is to call fetch-request-token with the consumer
+  returned here(optionally with a callback-url)."
   [app-key app-secret]
   (oauth/make-consumer app-key
                        app-secret
@@ -16,20 +18,23 @@
                        :hmac-sha1))
 
 (defn fetch-request-token
-  "Return a request token that user may authorize."
+  "Takes a consumer and optionally a callback-uri and returns a request
+  token that user will need to authorize."
   ([consumer callback-uri]
      (oauth/request-token consumer callback-uri))
   ([consumer]
      (fetch-request-token consumer nil)))
 
 (defn authorization-url
-  "Return authorization endpoint."
+  "Takes a consumer and request-token and returns a URL to send the
+  user to in order to authenticate."
   [consumer request-token]
   (oauth/user-approval-uri consumer
                            (:oauth_token request-token)))
 
 (defn fetch-access-token-response
-  "Return a map with :oauth_token and :oauth_token_secret."
+  "Takes a consumer and request-token and returns a map with
+  :oauth_token and :oauth_token_secret."
   [consumer request-token]
   (oauth/access-token consumer
                       request-token))
@@ -46,7 +51,7 @@
                      body))
 
 (defn account-info
-  "Retrieve information about the user's account."
+  "Retrieves information about the user's account."
   [consumer access-token-response]
   (let [request-url "https://api.dropbox.com/1/account/info"
         credentials (make-credentials consumer
@@ -102,9 +107,9 @@
      (delta consumer access-token-response nil)))
 
 (defn upload-file
-  "Upload file to Dropbox using PUT.
-     root: this can be either :dropbox or :sandbox
-     remote-path: this is the path where the file will be uploaded to"
+  "Uploads file to Dropbox using PUT. `root` can be either :dropbox or
+     :sandbox. `remote-path` is the path where the file will be
+     uploaded to."
   [consumer access-token-response root remote-path local-path]
   (let [request-url (format "https://api-content.dropbox.com/1/files_put/%s/%s"
                             (name root)
@@ -120,7 +125,8 @@
                   true)))
 
 (defn metadata
-  "Retrieve file and folder metadata."
+  "Retrieves file or folder metadata. `root` can be either :dropbox or
+  :sandbox. `path` is the path of a folder or file."
   [consumer access-token-response root path]
   (let [request-url (format "https://api.dropbox.com/1/metadata/%s/%s"
                             (name root)
@@ -134,6 +140,7 @@
                                    {:query-params credentials})) true)))
 
 (defn create-folder
+  "Creates a folder at `path`. Root can be either :sandbox or :dropbox."
   [consumer access-token-response root path]
   (let [request-url "https://api.dropbox.com/1/fileops/create_folder"
         credentials (make-credentials consumer
