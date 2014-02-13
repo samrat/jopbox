@@ -151,3 +151,18 @@
     (http/post request-url
                {:query-params credentials
                 :body {:root (name root) :path path}})))
+
+(defn search
+  "Searches for a given query."
+  [consumer access-token-response root path query]
+  (let [request-url (format "https://api.dropbox.com/1/search/%s/%s"
+                            (name root)
+                            path)
+        q {:query query}
+        credentials (make-credentials consumer
+                                      access-token-response
+                                      :POST
+                                      request-url
+                                      q)]
+    (parse-string (:body (http/post request-url
+                                    {:query-params (merge q credentials)})))))
