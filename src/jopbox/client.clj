@@ -143,14 +143,14 @@
   "Creates a folder at `path`. Root can be either :sandbox or :dropbox."
   [consumer access-token-response root path]
   (let [request-url "https://api.dropbox.com/1/fileops/create_folder"
+        params {:root (name root) :path path}
         credentials (make-credentials consumer
                                       access-token-response
                                       :POST
                                       request-url
-                                      nil)]
+                                      params)]
     (http/post request-url
-               {:query-params credentials
-                :body {:root (name root) :path path}})))
+               {:query-params (merge credentials params)})))
 
 (defn search
   "Searches for a given query."
