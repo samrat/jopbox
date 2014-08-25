@@ -22,7 +22,7 @@ Add this to your `project.clj`'s dependencies:
 Require `jopbox` from the REPL:
 
 ```clojure
-(use 'jopbox.client)
+(require '[jopbox.client :refer :all])
 ```
 
 And before doing anything, you'll want to create a new Dropbox app [here](https://www.dropbox.com/developers/apps).
