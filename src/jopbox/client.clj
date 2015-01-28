@@ -95,13 +95,15 @@
 (defn delta
   ([consumer access-token-response cursor]
      (let [request-url "https://api.dropbox.com/1/delta"
+           params {:cursor cursor}
            credentials (make-credentials consumer
                                          access-token-response
                                          :POST
                                          request-url
-                                         nil)]
+                                         params)]
        (parse-string (:body (http/post request-url
-                                       {:query-params credentials}))
+                                       {:query-params credentials
+                                        :form-params params}))
                      true)))
   ([consumer access-token-response]
      (delta consumer access-token-response nil)))
