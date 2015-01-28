@@ -95,16 +95,36 @@
 (defn delta
   ([consumer access-token-response cursor]
      (let [request-url "https://api.dropbox.com/1/delta"
+           params {:cursor cursor}
            credentials (make-credentials consumer
                                          access-token-response
                                          :POST
                                          request-url
-                                         nil)]
+                                         params)]
        (parse-string (:body (http/post request-url
-                                       {:query-params credentials}))
+                                       {:query-params credentials
+                                        :form-params params}))
                      true)))
   ([consumer access-token-response]
      (delta consumer access-token-response nil)))
+
+(defn longpoll_delta
+  "Long-poll GET request for changes from a previous `delta` cursor.
+    The `cursor` must have come from a previous `delta` call; the
+    `timeout` argument is optional, and defaults to 30 with a maximum of
+    480."
+  [consumer access-token-response cursor & timeout]
+  (let [request-url "https://api-notify.dropbox.com/1/longpoll_delta"
+        params {:cursor cursor
+                :timeout (min 480 (max 30 (or timeout 30)))}
+        credentials (make-credentials consumer
+                                      access-token-response
+                                      :GET
+                                      request-url
+                                      params)]
+    (parse-string (:body (http/get request-url
+                                   {:query-params (merge credentials params)}))
+                  true)))
 
 (defn upload-file
   "Uploads file to Dropbox using PUT. `root` can be either :dropbox or
