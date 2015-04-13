@@ -1,4 +1,4 @@
-(defproject jopbox "0.2.3"
+(defproject jopbox "0.2.3-JEFF"
   :description "A Clojure Library to work with Dropbox API"
   :url "http://github.com/samrat/jopbox"
   :license {:name "Eclipse Public License"
