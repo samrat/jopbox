@@ -166,3 +166,16 @@
                                       q)]
     (parse-string (:body (http/post request-url
                                     {:query-params (merge q credentials)})))))
+
+(defn move
+  "Moves a file or folder to a new location."
+  [consumer access-token-response root from-path to-path]
+  (let [request-url "https://api.dropbox.com/1/fileops/move"
+        params {:root (name root) :from_path from-path :to_path to-path}
+        credentials (make-credentials consumer
+                                      access-token-response
+                                      :POST
+                                      request-url
+                                      params)]
+    (http/post request-url
+               {:query-params (merge credentials params)})))

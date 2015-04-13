@@ -88,6 +88,12 @@ See [Dropbox's API Reference][docs] for more information on these methods.
 (upload-file consumer access-token-response :sandbox "foo.mp3" "/path/to/foo.mp3")
 ```
 
+#### Move file `/fileops/move`
+```clojure
+(move consumer access-token-response :sandbox "foo.mp3" "/path/to/foo.mp3")
+;; Moves foo.mp3 in the root dir to /path/to/foo.mp3. The destination path must exist.
+```
+
 ## Running Tests
 
 Create a file `test/jopbox/dropbox_keys.clj` with the following
